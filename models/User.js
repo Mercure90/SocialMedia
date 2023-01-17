@@ -71,6 +71,14 @@ UserSchema.pre('save', async function () {
   this.password = await bcrypt.hash(this.password, salt)
 })
 
+UserSchema.pre('findOneAndUpdate', async function () {
+  const newPassword = this.getUpdate().$set.password
+  if(newPassword!=undefined){
+    const salt = await bcrypt.genSalt(10)
+    this.getUpdate().$set.password = await bcrypt.hash(newPassword, salt)
+ }
+});
+
 UserSchema.methods.createJWT = function () {
   return jwt.sign(
     { userId: this._id, username: this.username },
