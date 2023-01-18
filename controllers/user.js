@@ -52,7 +52,19 @@ const followUser = async (req, res) => {
 };
 
 const unfollowUser = async (req, res) => {
-  return res.status(200).json("unfollow user");
+  if (req.body.userId !== req.params.id) {
+    const user = await User.findById(req.params.id);
+    const currentUser = await User.findById(req.body.userId);
+    if (user.followers.includes(req.body.userId)) {
+      await user.updateOne({ $pull: { followers: req.body.userId } });
+      await currentUser.updateOne({ $pull: { following: req.params.id } });
+      res.status(200).json("user has been unfollowed")
+    } else {
+      throw new ForbidenError("You don't follow this user");
+    }
+    return res.status(200).json("follow user");
+  }
+  throw new ForbidenError("you can't unfollow yourself' !");
 };
 
 module.exports = {
