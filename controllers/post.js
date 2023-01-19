@@ -87,6 +87,7 @@ const likePost = async (req, res) => {
 };
 // get a post
 const getPost = async (req, res) => {
+    //console.log(req)
   const {
     user: { userId },
     params: { id: postId },
@@ -109,7 +110,6 @@ const getPostTimeline = async (req, res) => {
     const {
         user: { userId }
       } = req;
-    console.log(userId)
     const currentUser = await User.findById(userId)
     const userPost = await Post.find({userBy: userId});
     const friendsPost = await Promise.all(
