@@ -10,13 +10,17 @@ const {
     getPostTimeline
 } = require('../controllers/post');
 
-router.route('/').post(createPost).get(getPostTimeline);
+router.route('/').post(createPost);
+
+router.route('/timeline').get(getPostTimeline);
 
 router.route('/:id')
     .get(getPost)
     .put(updatePost)
     .delete(deletePost);
 
-router.route('/:id/like').put(likePost)
+
+
+router.route('/:id/like').put(likePost);
 
 module.exports = router
